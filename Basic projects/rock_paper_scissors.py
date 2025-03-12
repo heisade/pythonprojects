@@ -6,8 +6,6 @@ def bot_choice():
     bot_random = random.choice(bot)
     return bot_random
 
-#bot_choice = rps()
-print(bot_choice())
 
 print("================== Welcome to Rock, Paper, Scissors ==================")
 
@@ -27,13 +25,11 @@ while True:
             print("You win!!")
         elif user_choice == 'scissors' and bot_selection == 'paper':
             print("You win!!")
+        
         # For draws
-        elif user_choice == 'rock' and bot_selection == 'rock':
+        elif user_choice == bot_selection:
             print("It's a draw!")
-        elif user_choice == 'paper' and bot_selection == 'paper':
-            print("It's a draw!")
-        elif user_choice == 'scissors' and bot_selection == 'scissors':
-            print("It's a draw!")
+        
         # For loses
         else:
             print("You lose")
