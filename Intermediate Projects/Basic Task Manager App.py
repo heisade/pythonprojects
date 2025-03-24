@@ -1,45 +1,58 @@
-class task_manager_app:
+class Task_Manager:
+    print("📜 Task Manager App")
     def __init__(self):
-        self.all_task = []
+        self.tasks_list = []
 
-    def add_task(self, task):
-        self.all_task.append({"Task": task, "Completed": False})
+    def load_tasks(self):
+        try:
+            with open("tasks.txt", "r") as file:
+                self.tasks_list = []
+                for line in file.readlines():
+                    task_info = line.strip().split(" | ")
+                    self.tasks_list.append({"Task": task_info[0], "Completed": task_info[1] == "True"})
+        except FileNotFoundError:
+            self.tasks_list = []
+    
+    def save_tasks(self):
+        with open("tasks.txt", "w") as file:
+            for task in self.tasks_list:
+                file.write(f"{task['Task']} | {task['Completed']}\n")
 
-    def edit_tasks(self, old_task, new_task):
-        for task in self.all_task:
-            if task["Task"] == old_task:
-                task["Task"] = new_task
-                print(f"Task {old_task} updated to {new_task}")
-                return
-        print("Task not found!")
-
-    def delete_tasks(self, del_task):
-        for task in self.all_task:
-            if task["Task"] == del_task:
-                self.all_task.remove(task)
-                print(f"Task: {del_task} has been removed.")
-                return
-        print("Task not available!")
-
-
-    def completed_tasks(self, completed_task):
-        for task in self.all_task:
-            if task["Task"] == completed_task:
+    def Add_task(self, task):
+        self.tasks_list.append({"Task": task, "Completed": False})
+        print("-" * 60)
+        print(f"📃 Task:'{task}' successfully added to Task List")
+        self.save_tasks()
+        
+    
+    def mark_task(self, completed):
+        for task in self.tasks_list:
+            if task["Task"] == completed:
                 task["Completed"] = True
-                print(f"Task: {completed_task} has been completed. ✅")
+                print("-" * 60)
+                print(f"✅ Task: '{task["Task"]}' has been marked as completed.")
+                self.save_tasks()
                 return
-        print("Task not available!")
+        print("❌ Task not found.")
 
-    def filter_pending_task(self):
-        pending = [task["Task"] for task in self.all_task if not task["Completed"]]
-        if pending:
-            print(f"Pending Tasks: {pending}")
-        else:
-            print("No pending tasks!")
+    def view_tasks(self):
+        if not self.tasks_list:
+            print("No tasks available.")
+            return
+        
+        print("\n📃**Task List: **\n")
+        for index, task in enumerate(self.tasks_list, 1):
+            status = "✅" if task["Completed"] else "❌"
+            print(f"{index}. {task["Task"]} | {status}")
+        print("-" * 60)
 
-    def filter_completed_task(self):
-        completed = [task["Task"] for task in self.all_task if task["Completed"]]
-        if completed:
-            print(f"Completed Tasks: {completed}")
-        else:
-            print("No Completed Task")
+    def delete_task(self, delete):
+        for task in self.tasks_list:
+            if task["Task"] == delete:
+                self.tasks_list.remove(task)
+                print(f"🗑️  Task: {delete} has successfully been removed.")
+                self.save_tasks()
+                return
+        print("-" * 60)
+        print("❌ Task not found in Task list.")
+
