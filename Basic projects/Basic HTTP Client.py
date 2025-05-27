@@ -1,3 +1,5 @@
+# A Simple HTTP Client that communicates with web servers using sockets
+
 import socket
 
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
